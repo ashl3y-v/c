@@ -53,13 +53,3 @@ def lg_mult(f, g, v):
     sols = solve([grad(f, v) + t_s] + g)
 
     return sols, evaluate(f, sols)
-
-
-f = parse_expr("x**2 + y")
-g = [parse_expr("x**2 + y**2 - 1")]
-v = symbols("x y")
-
-sols, vals = lg_mult(f, g, v)
-
-pprint(sols)
-pprint(vals)
