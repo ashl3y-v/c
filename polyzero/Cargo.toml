@@ -2,7 +2,7 @@
 name = "polyzero"
 description = "find the roots of a polynomial recursively via Newton's method on radii of its derivative's zeros"
 license = "MIT"
-version = "0.1.0"
+version = "0.0.1"
 edition = "2021"
 
 [dependencies]

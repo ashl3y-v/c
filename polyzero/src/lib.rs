@@ -122,6 +122,7 @@ impl<T> Pol<T> {
         Pol::new(coef)
     }
 
+    // idea: use certain sampling method for the convex hull of the derivative and the interior
     /// attempt to find all the complex roots of the polynomial with radii `n` * its degree, maximum iterations of newton's method `m`, coefficient of rounding for eliminating identical solutions `r_coef`, and `eps`, passed to sampling and newton's method, and used for rounding
     /// a degree k polynomial will have k roots (although they may be the same) and is not trivially solved
     /// differentiating this a times will yield a polynomial with k - a roots
