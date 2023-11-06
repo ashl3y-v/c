@@ -1,62 +1,50 @@
-use polyzero::{newt, samp, Complex, Pol};
+#![feature(float_gamma)]
+
+use num_complex::Complex;
+use polynomial::Polynomial;
+use polyzero::roots;
+
+// worse at solving for reals than imaginary
 
 fn main() {
-    let im = |re, im| Complex::new(re, im);
+    let im = Complex::new;
 
-    let n = 8;
-    let m = 10000;
-    let eps = (2_f64).powi(9) * f64::EPSILON;
-    let r_coef = (2_f64).powi(4);
+    im(0., 0.);
 
-    // let p = Pol::new(vec![
-    //     im(-20736., 0.),
-    //     im(0., 0.),
-    //     im(19440., 0.),
-    //     im(0., 0.),
-    //     im(2848., 0.),
-    //     im(0., 0.),
-    //     im(-1455., 0.),
-    //     im(0., 0.),
-    //     im(-113., 0.),
-    //     im(0., 0.),
-    //     im(16., 0.),
-    //     im(0., 0.),
+    let radii_coef = 2;
+    let max_iter = 2usize.pow(12);
+    let round_coef = 2_f64.powi(4);
+    let eps = 2_f64.powi(2) * f64::EPSILON;
+
+    let n = 30;
+    let p = Polynomial::new(
+        (0..n)
+            .map(|n| match n % 2 {
+                0 => Complex::new(0., 0.),
+                _ => Complex::new(
+                    (-1f64).powi(n as i32 / 2) * (n as f64 + 1.).gamma().recip(),
+                    0.,
+                ),
+            })
+            .collect::<Vec<_>>(),
+    );
+
+    // let p = Polynomial::new(vec![
+    //     im(40320., 0.),
+    //     im(0., 109584.),
+    //     im(-118124., 0.),
+    //     im(0., -67284.),
+    //     im(22449., 0.),
+    //     im(0., 4536.),
+    //     im(-546., 0.),
+    //     im(0., -36.),
     //     im(1., 0.),
     // ]);
 
-    // let p = Pol::new(vec![
-    //     im(518400., 0.),
-    //     im(0., 0.),
-    //     im(-773136., 0.),
-    //     im(0., 0.),
-    //     im(296296., 0.),
-    //     im(0., 0.),
-    //     im(-44473., 0.),
-    //     im(0., 0.),
-    //     im(3003., 0.),
-    //     im(0., 0.),
-    //     im(-91., 0.),
-    //     im(0., 0.),
-    //     im(1., 0.),
-    // ]);
+    dbg!(&p);
 
-    let p = Pol::new(vec![
-        im(4., 0.),
-        im(0., 0.),
-        im(5., 0.),
-        im(0., 0.),
-        im(1., 0.),
-    ]);
+    dbg!(roots(&p, radii_coef, max_iter, round_coef, eps));
 
-    let z = p.roots(n, m, r_coef, eps);
-    dbg!(&z);
-
-    // dbg!(z.iter().map(|z| p.eval(z.clone())).collect::<Vec<_>>());
-    // dbg!(z
-    //     .iter()
-    //     .map(|a| Complex::new(
-    //         (a.re * eps.recip()).round() as i64,
-    //         (a.im * eps.recip()).round() as i64,
-    //     ))
-    //     .collect::<Vec<_>>());
+    // let v = vec![im(5., 5.)];
+    // dbg!(halley(&p, v, max_iter, eps));
 }
