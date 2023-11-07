@@ -12,6 +12,10 @@ from sympy import (
 
 init_printing()
 
+θ = Symbol('θ')
+φ = Symbol('φ')
+u = Symbol('u')
+v = Symbol('v')
 
 def evaluate(f, s):
     return [f.subs(x) for x in s]

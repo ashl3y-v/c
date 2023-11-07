@@ -1,8 +1,9 @@
 use nalgebra::{Complex, ComplexField, DMatrix, Dyn, RealField};
 
-pub fn eigenzeros<T>(p: Vec<T>) -> Vec<Complex<T>>
+/// find the zeros
+pub fn eigenzeros<T>(p: Vec<T>) -> Option<Vec<T>>
 where
-    T: Copy + RealField,
+    T: Copy + ComplexField,
 {
     let n = p.len() - 1;
 
@@ -10,8 +11,8 @@ where
 
     let p = p
         .into_iter()
-        .map(|c| c / leading_coef)
         .take(n)
+        .map(|c| c / leading_coef)
         .collect::<Vec<_>>();
 
     let c = DMatrix::from_fn_generic(Dyn(p.len()), Dyn(p.len()), |i, j| {
@@ -27,12 +28,12 @@ where
         }
     });
 
-    c.complex_eigenvalues().as_slice().to_vec()
+    c.eigenvalues().map(|v| v.as_slice().to_vec())
 }
 
-pub fn eigenzeros_im<T>(p: Vec<T>) -> Vec<T>
+pub fn eigenzeros_complex<T>(p: Vec<T>) -> Vec<Complex<T>>
 where
-    T: Copy + ComplexField,
+    T: Copy + RealField,
 {
     let n = p.len() - 1;
 
