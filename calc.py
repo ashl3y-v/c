@@ -8,14 +8,31 @@ from sympy import (
     Matrix,
     Sum,
     sqrt,
+    cos,
+    sin,
+    tan,
+    pi,
 )
 
 init_printing()
 
+x = Symbol('x')
+y = Symbol('y')
+z = Symbol('z')
+t = Symbol('t')
 θ = Symbol('θ')
 φ = Symbol('φ')
 u = Symbol('u')
 v = Symbol('v')
+ρ = Symbol('ρ')
+r = Symbol('r')
+π = pi
+
+cylindrical = [[x, r*cos(θ)], [y, r*sin(θ)], [z, z]]
+spherical = [[x, ρ*cos(θ)*sin(φ)], [y, ρ*sin(θ)*sin(φ)], [z, ρ*cos(φ)]]
+
+vol_c = r
+vol_s = ρ**2 * sin(φ)
 
 def evaluate(f, s):
     return [f.subs(x) for x in s]
