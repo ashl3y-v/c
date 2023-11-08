@@ -1,10 +1,10 @@
-use eigenzeros::{eigenzeros, eigenzeros_complex};
+use eigenzeros::eigenzeros;
 use nalgebra::{Complex, DMatrix, Dyn};
 
 fn main() {
-    // let im = Complex::new;
+    let im = Complex::new;
 
-    let p = vec![1., 0., 1.];
+    let p = vec![im(1., 0.), im(0., 0.), im(0., 0.), im(1., 0.)];
 
-    dbg!(eigenzeros_complex(p));
+    dbg!(eigenzeros(p));
 }
