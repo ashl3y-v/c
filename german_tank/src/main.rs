@@ -1,59 +1,84 @@
-/*
-n: true number of tanks
-n_hat: our prediction
-k: number observed
-m: maximum observed
-
-axioms:
-the number of tanks will be between 1000 and 1000000
-instead of cheating, add nat log terms for fit
-formula does not contain an explicit term for k except in modifying other terms
-n_hat prop m
-n_hat - m grows inv k
-
-n_hat = c_0 m + c_1 ln(m) + c_2 ln(k) + c_3 ln(σ)
-*/
-
-use std::ops::Range;
-
 use nalgebra::{Const, DMatrix, DVector, Dyn};
 use rand::{thread_rng, Rng};
+use rayon::prelude::*;
+use std::ops::Range;
 
-fn gen_data(n: usize, k: usize, rng: &mut impl Rng) -> DMatrix<f64> {
-    let mut d = Vec::new();
+fn gen_data(n: &Range<usize>, k: usize, l: usize) -> (DMatrix<f64>, DVector<f64>) {
+    let d = n
+        .to_owned()
+        .into_par_iter()
+        .flat_map(|n_i| {
+            let mut rng = thread_rng();
 
-    for _ in 0..n {
-        let mut s = Vec::new();
+            (0..l)
+                .flat_map(|_| {
+                    let mut s = Vec::new();
 
-        for _ in 0..k {
-            let t = rng.gen_range(0..n);
+                    for _ in 1..k {
+                        let t = rng.gen_range(1..=n_i);
 
-            if !s.contains(&t) {
-                s.push(t);
-            }
-        }
+                        if !s.contains(&t) {
+                            s.push(t);
+                        }
+                    }
 
-        d.extend_from_slice(&[s.into_iter().max().unwrap() as f64])
-    }
+                    let m = s.into_iter().max().unwrap() as f64;
 
-    dbg!(&d);
+                    [m]
+                })
+                .collect::<Vec<_>>()
+        })
+        .collect::<Vec<_>>();
 
-    dbg!(&d.len());
+    let x = DMatrix::from_row_slice_generic(Dyn(n.len() * l), Dyn(1), d.as_slice());
 
-    DMatrix::from_row_slice_generic(Dyn(n), Dyn(1), d.as_slice())
+    let b = DVector::from_iterator_generic(
+        Dyn(n.len() * l),
+        Const::<1>,
+        n.clone()
+            .flat_map(|x| [x as f64].repeat(l))
+            .collect::<Vec<_>>(),
+    );
+
+    (x, b)
 }
 
 fn main() {
-    let mut rng = thread_rng();
-
-    let n = 10000;
+    let n = 1..2usize.pow(14);
     let k = 4;
+    let l = 2usize.pow(14);
 
-    let b = DVector::from_iterator_generic(Dyn(n), Const::<1>, 0..n);
-
-    let x = gen_data(n, k, &mut rng);
+    let (x, b) = gen_data(&n, k, l);
 
     let coef = x.clone().pseudo_inverse(f64::EPSILON).unwrap() * b.clone();
+    let coef = coef.insert_row(0, -1.);
+
+    let x = x.clone().insert_column(0, 1.);
+
+    let their_coef = [-1., 1. + 1. / k as f64];
+    let their_coef =
+        DVector::from_column_slice_generic(Dyn(their_coef.len()), Const::<1>, &their_coef);
 
     println!("{}", coef);
+    println!("{}", their_coef);
+
+    let err = (&b - &x * &coef).abs();
+    let their_err = (&b - &x * &their_coef).abs();
+
+    dbg!(err.mean());
+
+    println!("generated dist");
+    dbg!(err.mean() - their_err.mean());
+    dbg!(err.variance().sqrt() - their_err.variance().sqrt());
+
+    let (x, b) = gen_data(&(990..1000), k, l);
+
+    let x = x.clone().insert_column(0, 1.);
+
+    let err = (&b - &x * &coef).abs();
+    let their_err = (&b - &x * &their_coef).abs();
+
+    println!("test dist");
+    dbg!(err.mean() - their_err.mean());
+    dbg!(err.variance().sqrt() - their_err.variance().sqrt());
 }
