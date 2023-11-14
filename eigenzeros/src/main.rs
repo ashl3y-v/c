@@ -1,5 +1,5 @@
 use eigenzeros::eigenzeros;
-use nalgebra::{Complex, DMatrix, Dyn};
+use nalgebra::{dmatrix, Complex, DMatrix, Dyn};
 
 fn main() {
     let im = Complex::new;
