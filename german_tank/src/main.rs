@@ -24,13 +24,13 @@ fn gen_data(n: &Range<usize>, k: usize, l: usize) -> (DMatrix<f64>, DVector<f64>
 
                     let m = s.into_iter().max().unwrap() as f64;
 
-                    [m]
+                    [1., m]
                 })
                 .collect::<Vec<_>>()
         })
         .collect::<Vec<_>>();
 
-    let x = DMatrix::from_row_slice_generic(Dyn(n.len() * l), Dyn(1), d.as_slice());
+    let x = DMatrix::from_row_slice_generic(Dyn(n.len() * l), Dyn(2), d.as_slice());
 
     let b = DVector::from_iterator_generic(
         Dyn(n.len() * l),
@@ -44,16 +44,17 @@ fn gen_data(n: &Range<usize>, k: usize, l: usize) -> (DMatrix<f64>, DVector<f64>
 }
 
 fn main() {
-    let n = 1..2usize.pow(14);
+    let n = 1..10000;
     let k = 4;
-    let l = 2usize.pow(14);
+    let l = 100;
 
     let (x, b) = gen_data(&n, k, l);
 
-    let coef = x.clone().pseudo_inverse(f64::EPSILON).unwrap() * b.clone();
-    let coef = coef.insert_row(0, -1.);
-
-    let x = x.clone().insert_column(0, 1.);
+    let coef = x
+        .clone()
+        .pseudo_inverse(f64::EPSILON)
+        .expect("Pseudoinverse failed")
+        * b.clone();
 
     let their_coef = [-1., 1. + 1. / k as f64];
     let their_coef =
@@ -72,8 +73,6 @@ fn main() {
     dbg!(err.variance().sqrt() - their_err.variance().sqrt());
 
     let (x, b) = gen_data(&(990..1000), k, l);
-
-    let x = x.clone().insert_column(0, 1.);
 
     let err = (&b - &x * &coef).abs();
     let their_err = (&b - &x * &their_coef).abs();
