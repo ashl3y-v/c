@@ -16,23 +16,24 @@ from sympy import (
 
 init_printing()
 
-x = Symbol('x')
-y = Symbol('y')
-z = Symbol('z')
-t = Symbol('t')
-θ = Symbol('θ')
-φ = Symbol('φ')
-u = Symbol('u')
-v = Symbol('v')
-ρ = Symbol('ρ')
-r = Symbol('r')
+x = Symbol("x")
+y = Symbol("y")
+z = Symbol("z")
+t = Symbol("t")
+θ = Symbol("θ")
+φ = Symbol("φ")
+u = Symbol("u")
+v = Symbol("v")
+ρ = Symbol("ρ")
+r = Symbol("r")
 π = pi
 
-cylindrical = [[x, r*cos(θ)], [y, r*sin(θ)], [z, z]]
-spherical = [[x, ρ*cos(θ)*sin(φ)], [y, ρ*sin(θ)*sin(φ)], [z, ρ*cos(φ)]]
+cylindrical = [[x, r * cos(θ)], [y, r * sin(θ)], [z, z]]
+spherical = [[x, ρ * cos(θ) * sin(φ)], [y, ρ * sin(θ) * sin(φ)], [z, ρ * cos(φ)]]
 
 vol_c = r
 vol_s = ρ**2 * sin(φ)
+
 
 def evaluate(f, s):
     return [f.subs(x) for x in s]
@@ -41,26 +42,19 @@ def evaluate(f, s):
 def grad(f, v):
     return Matrix([f.diff(x) for x in v])
 
-def nabla(f, x, y, z):
-    return Matrix([f.diff(x), f.diff(y), f.diff(z)])
 
-def nabla_v(f, x, y, z,  v):
-    return nabla(f, x, y, z).dot(v)
+def divergence(vec_F, *vars):
+    return sum(Matrix([vec_F[i].diff(v) for i, v in enumerate(vars)]))
 
-def gradient_op(f, *variables):
-    """return the vector gradient of a scalar function."""
-    return Matrix([f.diff(v) for v in variables ])
-
-def divergence_op(vec_F, *vars):
-    """Return the scalar divergence of a vector field."""
-    return sum( Matrix( [ vec_F[i].diff(v) for i,v in enumerate(vars)]) )
 
 def curl_part(vec_F, u, v, *vars):
     return vec_F[v].diff(vars[u]) - vec_F[u].diff(vars[v])
-    
+
+
 def curl_op(vec_F, *vars):
     """Return the curl of a vector field."""
-    return Matrix([curl_part(vec_F, u, v, *vars) for u, v in [(1,2), (2,0), (0,1)]])
+    return Matrix([curl_part(vec_F, u, v, *vars) for u, v in [(1, 2), (2, 0), (0, 1)]])
+
 
 def lg_mult(f, g, v):
     l = symbols(f"λ:{len(g)}")
