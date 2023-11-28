@@ -1,29 +1,46 @@
 from sympy import (
-    symbols,
-    Symbol,
-    pprint,
-    solve,
+    Integer,
     Matrix,
+    Rational,
     Sum,
-    sqrt,
+    Symbol,
     cos,
-    sin,
-    tan,
+    erf,
+    exp,
     pi,
+    pprint,
+    sin,
+    solve,
+    sqrt,
+    symbols,
+    tan,
+)
+from sympy.stats import (
+    Die,
+    E,
+    Normal,
+    P,
+    variance,
 )
 
-from sympy.stats import P, E, variance, Die, Normal
-
+a = Symbol("a")
+b = Symbol("b")
+c = Symbol("c")
+r = Symbol("r")
+t = Symbol("t")
+u = Symbol("u")
+v = Symbol("v")
 x = Symbol("x")
 y = Symbol("y")
 z = Symbol("z")
-t = Symbol("t")
 θ = Symbol("θ")
-φ = Symbol("φ")
 μ = Symbol("μ")
-u = Symbol("u")
-σ = Symbol("σ")
-v = Symbol("v")
 ρ = Symbol("ρ")
-r = Symbol("r")
-π = pi
+σ = Symbol("σ")
+φ = Symbol("φ")
+
+normpdf = (
+    lambda x, μ, σ: 1 / (σ * sqrt(2 * pi)) * exp(-Rational(1, 2) * ((x - μ) / σ) ** 2)
+)
+normcdf = lambda x, μ, σ: Rational(1, 2) * (Integer(1) + erf((x - μ) / (σ * sqrt(2))))
+invnormcdf = lambda x, μ, σ: solve(normcdf(a, μ, σ) - x, a)
