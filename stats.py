@@ -1,46 +1,102 @@
-from sympy import (
-    Integer,
-    Matrix,
-    Rational,
-    Sum,
-    Symbol,
-    cos,
-    erf,
-    exp,
+import numpy as np
+from matplotlib import pyplot as plt
+from numpy import array
+from scipy.constants import (
+    G,
+    N_A,
+    c,
+    g,
+    h,
+    hbar,
+    k,
     pi,
-    pprint,
-    sin,
-    solve,
-    sqrt,
-    symbols,
-    tan,
 )
-from sympy.stats import (
-    Die,
-    E,
-    Normal,
-    P,
-    variance,
+from scipy.fft import (
+    fft,
+    fftfreq,
+    fftn,
+    fftshift,
+    ifft,
+    ifftn,
+    ifftshift,
+    irfft,
+    irfftn,
+    rfft,
+    rfftfreq,
+    rfftn,
 )
-
-a = Symbol("a")
-b = Symbol("b")
-c = Symbol("c")
-r = Symbol("r")
-t = Symbol("t")
-u = Symbol("u")
-v = Symbol("v")
-x = Symbol("x")
-y = Symbol("y")
-z = Symbol("z")
-θ = Symbol("θ")
-μ = Symbol("μ")
-ρ = Symbol("ρ")
-σ = Symbol("σ")
-φ = Symbol("φ")
-
-normpdf = (
-    lambda x, μ, σ: 1 / (σ * sqrt(2 * pi)) * exp(-Rational(1, 2) * ((x - μ) / σ) ** 2)
+from scipy.signal import (
+    convolve,
+    correlate,
 )
-normcdf = lambda x, μ, σ: Rational(1, 2) * (Integer(1) + erf((x - μ) / (σ * sqrt(2))))
-invnormcdf = lambda x, μ, σ: solve(normcdf(a, μ, σ) - x, a)
+from scipy.special import (
+    bernoulli,
+    beta,
+    binom,
+    comb,
+    erf,
+    factorial,
+    factorial2,
+    factorialk,
+    gamma,
+    lambertw,
+    log_softmax,
+    perm,
+    rgamma,
+    round,
+    sinc,
+    softmax,
+    zeta,
+)
+from scipy.stats import (
+    bernoulli,
+    binom,
+    binomtest,
+    chi2_contingency,
+    chisquare,
+    cumfreq,
+    describe,
+    differential_entropy,
+    ecdf,
+    entropy,
+    expon,
+    fit,
+    gamma,
+    geom,
+    goodness_of_fit,
+    iqr,
+    ks_1samp,
+    ks_2samp,
+    kstest,
+    kurtosis,
+    kurtosistest,
+    linregress,
+    mode,
+    moment,
+    monte_carlo_test,
+    multinomial,
+    multivariate_normal,
+    multivariate_t,
+    norm,
+    normaltest,
+    pearsonr,
+    percentileofscore,
+    poisson,
+    randint,
+    relfreq,
+    scoreatpercentile,
+    sem,
+    skew,
+    skewtest,
+    t,
+    trim1,
+    trimboth,
+    ttest_1samp,
+    ttest_ind,
+    ttest_ind_from_stats,
+    ttest_rel,
+    uniform,
+    variation,
+    wasserstein_distance,
+    zscore,
+)
