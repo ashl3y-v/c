@@ -1,3 +1,8 @@
+from math import (
+    sqrt,
+    exp,
+    log,
+)
 import numpy as np
 from matplotlib import pyplot as plt
 from numpy import array
@@ -100,3 +105,7 @@ from scipy.stats import (
     wasserstein_distance,
     zscore,
 )
+
+l_atm = 101.325
+
+R = 0.082057366080960
