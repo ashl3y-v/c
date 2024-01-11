@@ -10,6 +10,7 @@ from scipy.constants import (
     G,
     N_A,
     c,
+    convert_temperature,
     g,
     h,
     hbar,
