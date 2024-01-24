@@ -1,11 +1,23 @@
-from math import (
-    sqrt,
-    exp,
-    log,
-)
 import numpy as np
 from matplotlib import pyplot as plt
-from numpy import array
+from numpy import (
+    array,
+    cbrt,
+    ceil,
+    conj,
+    cos,
+    exp,
+    exp,
+    floor,
+    imag,
+    log,
+    log10,
+    log2,
+    real,
+    sin,
+    sqrt,
+    tan,
+)
 from scipy.constants import (
     G,
     N_A,
@@ -106,7 +118,5 @@ from scipy.stats import (
     wasserstein_distance,
     zscore,
 )
-
-l_atm = 101.325
 
 R = 0.082057366080960

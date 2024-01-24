@@ -16,19 +16,10 @@ from sympy import (
 
 init_printing()
 
-x = Symbol("x")
-y = Symbol("y")
-z = Symbol("z")
-t = Symbol("t")
-θ = Symbol("θ")
-φ = Symbol("φ")
-μ = Symbol("μ")
-σ = Symbol("σ")
-u = Symbol("u")
-v = Symbol("v")
-ρ = Symbol("ρ")
-r = Symbol("r")
-π = pi
+a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z = symbols("a:z")
+a0, a1, a2, a3, a4, a5, a6, a7, a8, a9 = symbols("a:10")
+
+# θ, φ, μ, σ, υ, ν, ρ = symbols("θ φ μ σ υ ν ρ")
 
 cylindrical = [[x, r * cos(θ)], [y, r * sin(θ)], [z, z]]
 spherical = [[x, ρ * cos(θ) * sin(φ)], [y, ρ * sin(θ) * sin(φ)], [z, ρ * cos(φ)]]
