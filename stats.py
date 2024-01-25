@@ -1,23 +1,4 @@
 import numpy as np
-from matplotlib import pyplot as plt
-from numpy import (
-    array,
-    cbrt,
-    ceil,
-    conj,
-    cos,
-    exp,
-    exp,
-    floor,
-    imag,
-    log,
-    log10,
-    log2,
-    real,
-    sin,
-    sqrt,
-    tan,
-)
 from scipy.constants import (
     G,
     N_A,
@@ -27,7 +8,6 @@ from scipy.constants import (
     h,
     hbar,
     k,
-    pi,
 )
 from scipy.fft import (
     fft,
@@ -114,9 +94,7 @@ from scipy.stats import (
     ttest_ind_from_stats,
     ttest_rel,
     uniform,
-    variation,
     wasserstein_distance,
-    zscore,
 )
 
 R = 0.082057366080960
