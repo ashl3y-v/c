@@ -2,8 +2,9 @@ import numpy as np
 from numba import njit
 
 
+@np.vectorize
 @njit
-def find_repeatand_len(n: int, base: int):
+def repeatand_digits(n: int, base: int):
     remainder_set = set()
     remainder = 1 % n
     repeatand_length = 0
@@ -16,8 +17,40 @@ def find_repeatand_len(n: int, base: int):
     return repeatand_length
 
 
-find_repeatand_len_vec = np.vectorize(find_repeatand_len, otypes=[int])
+bases = np.array(
+    [
+        2,
+        3,
+        4,
+        6,
+        8,
+        9,
+        10,
+        12,
+        16,
+        21,
+        25,
+        27,
+        29,
+        30,
+        32,
+        34,
+        36,
+        45,
+        46,
+        49,
+        55,
+        56,
+        57,
+        60,
+        64,
+    ]
+)
 
-
-def ts_first_n(ns: np.ndarray, bs: np.ndarray):
-    return np.array([find_repeatand_len_vec(np.array(ns), b) for b in bs])
+# n = np.expand_dims(np.array(range(2, 2**n + 1)), axis=-1)
+# t = repeatand_digits(n, bases).T
+# t.mean(axis=1)
+# bases * t.mean(axis=1)
+# bases ** t.mean(axis=1)
+# bases[t.mean(axis=1).argsort()]
+# np.sort(t.mean(axis=1)) / t.mean(axis=1).min()
