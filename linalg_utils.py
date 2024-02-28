@@ -1,12 +1,45 @@
+from multiprocessing import Pool
 import numpy as np
 import scipy as sp
-from numpy.linalg import svd, pinv, matrix_rank, norm
-from scipy.linalg import lu, orth, null_space
+import timeit
+
+np.set_printoptions(linewidth=2**8, suppress=True)
 
 
 def rref(a: np.ndarray):
-    u = lu(a)[-1]
-    rank = matrix_rank(u)
+    assert a.ndim > 1
+
+    if a.ndim == 2:
+        return _rref_mat(a)
+    else:
+        orig_dim = a.shape
+        a = a.reshape([-1, a.shape[-2], a.shape[-1]])
+        return np.array([[_rref_mat(x) for x in a]]).reshape(orig_dim)
+
+
+def rref_par(a: np.ndarray):
+    assert a.ndim > 1
+
+    if a.ndim == 2:
+        return _rref_mat(a)
+    else:
+        orig_dim = a.shape
+        a = a.reshape([-1, a.shape[-2], a.shape[-1]])
+        with Pool() as p:
+            return np.array(p.map(_rref_mat, a)).reshape(orig_dim)
+
+
+def _rref_mat(a: np.ndarray):
+    assert a.ndim > 1
+
+    rank = np.linalg.matrix_rank(a)
+    if rank == a.shape[-1]:
+        a = a.copy()
+        a[...] = 0
+        a[np.diag_indices(rank)] = 1
+        return a
+
+    u = sp.linalg.lu(a)[-1]
     scale = np.diag(u).copy()
     scale[rank:] = 1
     u /= np.expand_dims(scale, axis=-1)
@@ -21,18 +54,22 @@ def rref(a: np.ndarray):
     return u
 
 
-def matrix_support(x: np.ndarray):
-    return svd(x).Vh.T[..., : matrix_rank(x)]
-
-
-def matrix_cokernel(x: np.ndarray):
-    return svd(x).U[..., matrix_rank(x) :]
+def rankify_svdvals(a: np.ndarray):
+    u, s, vh = np.linalg.svd(a)
+    s[..., np.linalg.matrix_rank(a) :] = 0
+    return u * s @ vh
 
 
 def is_subspace(a: np.ndarray, b: np.ndarray, axis=None):
-    x = pinv(b) @ a
+    x = np.linalg.pinv(b) @ a
     return (
         np.allclose(b @ x, a)
         if axis is None
-        else np.isclose(norm(b @ x - a, axis=axis), 0)
+        else np.isclose(np.linalg.norm(b @ x - a, axis=axis), 0)
     )
+
+
+a = np.random.random([10, 10, 300, 300])
+
+d0 = timeit.timeit(lambda: rref(a), number=1)
+d1 = timeit.timeit(lambda: rref_ref0(a), number=1)
