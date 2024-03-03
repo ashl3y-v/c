@@ -1,7 +1,4 @@
 import numpy as np
-import timeit
-
-np.set_printoptions(suppress=True, edgeitems=8, linewidth=256)
 
 
 def rref(a: np.ndarray) -> np.ndarray:
@@ -21,26 +18,3 @@ def rref(a: np.ndarray) -> np.ndarray:
         a = np.vstack([a, np.zeros([m - a.shape[-2], n])])
 
     return a
-
-
-# if __name__ == "__main__":
-#     for i in range(2, 10):
-#         for j in range(2, 10):
-#             for n in range(50):
-#                 a = np.random.random([5, 5])
-#                 if n % 2 == 0:
-#                     a[-1] = a[0]
-#                 if n % 3 == 0:
-#                     a[:, -1] = a[:, 0]
-#                 if n % 4 == 0:
-#                     u, s, vh = np.linalg.svd(a)
-#                     s[1:] = 0
-#                     a = u * s @ vh
-
-#                 assert np.allclose(rref(a), rref_ref(a))
-
-#     a = np.random.random([2**11, 2**11])
-#     a[-3:] = a[0]
-
-#     d0 = timeit.timeit(lambda: rref(a), number=8)
-#     d1 = timeit.timeit(lambda: rref_ref(a), number=8)
