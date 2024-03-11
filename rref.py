@@ -15,6 +15,6 @@ def rref(a: np.ndarray) -> np.ndarray:
     a[:r, :r] = np.eye(r)
 
     if r < m:
-        a = np.vstack([a, np.zeros([m - a.shape[-2], n])])
+       a = np.vstack([a, np.zeros([m - a.shape[-2], n])])
 
     return a
