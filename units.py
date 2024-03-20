@@ -51,16 +51,3 @@ u = pq.UnitMass(
     sp.constants.epsilon_0 * pq.constants.epsilon_0.simplified.units,
     "ε_0",
 )
-
-l_P = pq.UnitLength("Planck_length", (ħ**0.5 * g**0.5 / pq.c**1.5).simplified, "l_P")
-m_P = pq.UnitMass("Planck_mass", (ħ**0.5 * pq.c**0.5 / g**0.5).simplified, "m_P")
-t_P = pq.UnitTime("Planck_time", (ħ**0.5 * g**0.5 / pq.c**2.5).simplified, "t_P")
-T_P = pq.UnitTemperature(
-    "Planck_temperature", (ħ**0.5 * pq.c**2.5 / g**0.5 / k).simplified, "T_P"
-)
-q_P = pq.UnitConstant(
-    "Planck_charge", (ε_0**0.5 * ħ**0.5 * pq.c**0.5).simplified, "q_P"
-)
-E_P = pq.UnitConstant("Planck_energy", (ħ**0.5 * pq.c**2.5 / g**0.5).simplified, "E_P")
-F_P = pq.UnitConstant("Planck_force", (pq.c**4 / g).simplified, "F_P")
-I_P = pq.UnitCurrent("Planck_current", (ε_0**0.5 * pq.c**3 / g**0.5).simplified, "I_P")

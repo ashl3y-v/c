@@ -1,6 +1,7 @@
 import numpy as np
 
 
+# broken
 def rref(a: np.ndarray) -> np.ndarray:
     m, n = a.shape
 
@@ -14,7 +15,12 @@ def rref(a: np.ndarray) -> np.ndarray:
     a[:r, r:] = np.linalg.inv(a[:r, :r]) @ a[:r, r:]
     a[:r, :r] = np.eye(r)
 
+    scale = np.diag(a[:, (a != 0).argmax(axis=-1)]).copy()
+    scale[scale == 0] = 1
+
+    a /= np.expand_dims(scale, axis=-1)
+
     if r < m:
-       a = np.vstack([a, np.zeros([m - a.shape[-2], n])])
+        a = np.vstack([a, np.zeros([m - a.shape[-2], n])])
 
     return a
